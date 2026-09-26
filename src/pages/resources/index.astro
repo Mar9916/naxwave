@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+const articles = Object.values(import.meta.glob('/src/blog/*.md', { eager: true }))
+  .map((entry: any) => ({ ...entry.frontmatter, Content: entry.Content }))
+  .filter((entry: any) => entry.published === true)
+  .sort((a: any, b: any) => String(b.date ?? '').localeCompare(String(a.date ?? '')));
+---
+<BaseLayout title="Insights & Buying Guides | NAXWAVE"><section class="page-hero"><div class="wrap"><div class="eyebrow">Resources</div><h1>Knowledge for better product decisions.</h1><p>Technical articles and buying guides for pet brands and distribution partners.</p></div></section><section class="section"><div class="wrap">{articles.length ? articles.map((article: any) => <a class="resource-row" href={`/resources/${article.slug}/`}><span><b>{article.title}</b><br/>{article.summary ?? ''}</span><span>{article.date ?? ''} ↗</span></a>) : <div class="placeholder">No articles published yet. Add and publish articles through Pages CMS.</div>}</div></section></BaseLayout>

@@ -1,0 +1,12 @@
+.mobile-menu{display:none}
+.header>nav{display:flex}
+@media(max-width:800px){
+  .header>nav{display:none!important}
+  .mobile-menu{display:block;position:relative}
+  .mobile-menu summary{list-style:none;cursor:pointer;border:1px solid var(--line);border-radius:5px;padding:9px 11px;color:var(--blue);font-size:18px;line-height:1}
+  .mobile-menu summary::-webkit-details-marker{display:none}
+  .mobile-menu nav{display:none!important;position:absolute;z-index:10;right:-10px;top:42px;min-width:190px;flex-direction:column;gap:0!important;padding:8px;background:white;border:1px solid var(--line);border-radius:7px;box-shadow:0 14px 32px #173d5a20}
+  .mobile-menu[open] nav{display:flex!important}
+  .mobile-menu nav a{padding:11px 12px;border-radius:4px}
+  .mobile-menu nav a:hover{background:var(--pale)}
+}

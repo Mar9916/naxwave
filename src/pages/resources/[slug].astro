@@ -1,0 +1,15 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+export function getStaticPaths() {
+  const entries = import.meta.glob('/src/blog/*.md', { eager: true });
+  return Object.entries(entries).flatMap(([path, entry]: [string, any]) => {
+    const frontmatter = entry.frontmatter ?? {};
+    if (!frontmatter.published) return [];
+    const slug = path.split('/').pop()!.replace(/\.md$/, '');
+    return [{ params: { slug }, props: { frontmatter, Content: entry.Content } }];
+  });
+}
+const { frontmatter, Content } = Astro.props;
+---
+<BaseLayout title={`${frontmatter.title} | NAXWAVE Insights`}><section class="page-hero"><div class="wrap"><div class="eyebrow">Insights · {frontmatter.date}</div><h1>{frontmatter.title}</h1><p>{frontmatter.summary}</p></div></section><section class="section"><article class="wrap article-content"><Content /><p style="margin-top:36px"><a class="button" href="/contact/">Discuss with our team ↗</a></p></article></section></BaseLayout>
+<style>.article-content{max-width:780px;color:#506b80;line-height:1.8}.article-content :global(h2),.article-content :global(h3){font-family:Manrope,sans-serif;color:#102c46;margin-top:36px}.article-content :global(p){margin:18px 0}</style>

@@ -1,0 +1,32 @@
+media:
+  - name: images
+    label: 图片
+    input: public/images
+    output: /images
+content:
+  - name: products
+    label: 产品
+    type: collection
+    path: src/data/products
+    filename: "{id}.json"
+    format: json
+    fields:
+      - { name: id, label: 型号, type: string, required: true }
+      - { name: title, label: 英文名称, type: string, required: true }
+      - { name: summary, label: 英文简介, type: text }
+      - { name: description, label: 详细介绍, type: rich-text }
+      - { name: specifications, label: 参数（确认后填写）, type: object, list: true, fields: [{ name: name, label: 参数名称, type: string }, { name: value, label: 参数值, type: string }] }
+      - { name: image, label: 产品图片, type: image }
+  - name: blog
+    label: 博客文章
+    type: collection
+    path: src/blog
+    filename: "{primary}.md"
+    format: yaml-frontmatter
+    fields:
+      - { name: title, label: 英文标题, type: string, required: true }
+      - { name: date, label: 发布日期, type: date }
+      - { name: summary, label: 摘要, type: text }
+      - { name: author, label: 作者, type: string }
+      - { name: published, label: 发布, type: boolean }
+      - { name: body, label: 正文, type: rich-text }

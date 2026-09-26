@@ -1,0 +1,7 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { products } from '../../data/site';
+export function getStaticPaths(){ return products.map((p)=>({params:{slug:p.id.toLowerCase()},props:{product:p}})); }
+const { product } = Astro.props;
+---
+<BaseLayout title={`${product.id} | NAXWAVE Pet Safety`}><section class="page-hero"><div class="wrap"><div class="eyebrow">Product overview · {product.id}</div><h1>{product.title}</h1><p>Product overview, technical specifications and commercial information will be added after confirmation.</p><a class="button" href="/contact/">Request information <span>↗</span></a></div></section><section class="section"><div class="wrap product-detail"><img src={product.image} alt={`${product.id} product image placeholder`}/><div><div class="eyebrow">{product.id}</div><h2 style="font:700 30px Manrope;color:var(--ink)">{product.title}</h2><p class="placeholder">Product description — to be provided.</p><table class="spec-table"><tbody>{['Key functions','Technical specifications','Certifications','MOQ / lead time','Pricing'].map((label)=><tr><td>{label}</td><td>To be confirmed</td></tr>)}</tbody></table><p style="margin-top:24px"><a class="button" href="/contact/">Ask about {product.id} <span>↗</span></a></p><p><a class="link-arrow" href="/products/compare/">Compare NAX100 and NAX101 ↗</a></p></div></div></section></BaseLayout>

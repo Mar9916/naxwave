@@ -1,0 +1,26 @@
+---
+import '../styles/global.css';
+import '../styles/mobile.css';
+const { title = 'GPS Pet Safety Systems | NAXWAVE', description = 'GPS pet safety products and B2B manufacturing partnerships.' } = Astro.props;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} /><meta name="theme-color" content="#073b72" />
+    <title>{title}</title><link rel="icon" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" /><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="topline">GPS PET SAFETY SYSTEMS <span>·</span> OEM / ODM PARTNERSHIPS</div>
+    <header class="header wrap">
+      <a class="brand" href="/" aria-label="NAXWAVE home"><span class="brand-mark">N</span><span>NAX<span class="brand-light">WAVE</span><small>PET SAFETY</small></span></a>
+      <nav><a href="/products/nax100/">Products</a><a href="/products/compare/">Compare</a><a href="/oem-odm/">OEM / ODM</a><a href="/solutions/">Solutions</a><a href="/resources/">Resources</a></nav>
+      <details class="mobile-menu"><summary aria-label="Open navigation">☰</summary><nav><a href="/products/nax100/">Products</a><a href="/products/compare/">Compare products</a><a href="/oem-odm/">OEM / ODM</a><a href="/solutions/">Solutions</a><a href="/resources/">Resources</a></nav></details>
+      <a class="button button-small" href="/contact/">Talk to our team <span>↗</span></a>
+    </header>
+    <main><slot /></main>
+    <footer><div class="wrap footer-grid"><div><a class="brand brand-footer" href="/"><span class="brand-mark">N</span><span>NAX<span class="brand-light">WAVE</span><small>PET SAFETY</small></span></a><p>GPS pet safety products for the next generation of pet brands.</p></div><div><b>Explore</b><a href="/products/nax100/">Products</a><a href="/oem-odm/">OEM / ODM</a><a href="/solutions/">Solutions</a><a href="/resources/">Insights</a></div><div><b>Get in touch</b><a href="/contact/">Business inquiry</a><a href="https://www.naxwave.com" target="_blank" rel="noreferrer">NAXWAVE corporate website ↗</a></div><div><b>Operating entity</b><p class="pending">[Operating entity name — to be provided]</p></div></div><div class="wrap footline"><span>© {new Date().getFullYear()} NAXWAVE. All rights reserved.</span><span>Product details and commercial terms: to be confirmed.</span></div></footer>
+  </body>
+</html>
