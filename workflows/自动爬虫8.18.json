@@ -1,0 +1,123 @@
+{
+  "name": "Google关键词逐个搜索并翻到最后一页",
+  "description": "Automa工作流配置草案：按keywords数组逐个打开Google搜索结果页，循环点击“下一页”，到最后一页后自动搜索下一个关键词。导入后请根据你当前Automa版本的块字段名/节点坐标做一次确认。",
+  "settings": {
+    "restartTimes": 0,
+    "reuseLastState": false,
+    "timezone": "Etc/UTC"
+  },
+  "variables": [
+    {
+      "name": "keywords",
+      "type": "array",
+      "value": [
+        "第一个关键词",
+        "第二个关键词",
+        "第三个关键词"
+      ],
+      "note": "把这里替换成你要搜索的关键词列表。"
+    },
+    {
+      "name": "keywordIndex",
+      "type": "number",
+      "value": 0
+    },
+    {
+      "name": "currentKeyword",
+      "type": "string",
+      "value": ""
+    },
+    {
+      "name": "hasNextPage",
+      "type": "boolean",
+      "value": true
+    }
+  ],
+  "workflow": {
+    "version": "1.0",
+    "nodes": [
+      {
+        "id": "trigger-manual",
+        "type": "trigger",
+        "label": "手动运行",
+        "next": "init-keyword"
+      },
+      {
+        "id": "init-keyword",
+        "type": "javascript-code",
+        "label": "读取当前关键词",
+        "code": "const keywords = automaRefData('variables', 'keywords') || [];\nconst index = Number(automaRefData('variables', 'keywordIndex') || 0);\nif (index >= keywords.length) {\n  automaSetVariable('currentKeyword', '');\n  automaSetVariable('hasNextPage', false);\n  automaNextBlock('done');\n} else {\n  automaSetVariable('currentKeyword', keywords[index]);\n  automaSetVariable('hasNextPage', true);\n  automaNextBlock('open-search');\n}",
+        "next": "open-search"
+      },
+      {
+        "id": "open-search",
+        "type": "new-tab",
+        "label": "打开Google搜索",
+        "url": "https://www.google.com/search?q={{variables.currentKeyword}}&hl=zh-CN&num=10",
+        "active": true,
+        "next": "wait-results"
+      },
+      {
+        "id": "wait-results",
+        "type": "wait-connections",
+        "label": "等待搜索结果加载",
+        "duration": 2500,
+        "next": "check-next"
+      },
+      {
+        "id": "check-next",
+        "type": "javascript-code",
+        "label": "判断是否还有下一页",
+        "code": "const next = document.querySelector('a#pnnext, a[aria-label=\"下一页\"], a[aria-label=\"Next page\"], a[aria-label=\"Next\"]');\nautomaSetVariable('hasNextPage', Boolean(next));\nif (next) {\n  automaNextBlock('click-next');\n} else {\n  automaNextBlock('next-keyword');\n}",
+        "next": "click-next"
+      },
+      {
+        "id": "click-next",
+        "type": "event-click",
+        "label": "点击下一页",
+        "selector": "a#pnnext, a[aria-label='下一页'], a[aria-label='Next page'], a[aria-label='Next']",
+        "markEl": false,
+        "multiple": false,
+        "next": "wait-page"
+      },
+      {
+        "id": "wait-page",
+        "type": "wait-connections",
+        "label": "等待下一页加载",
+        "duration": 2500,
+        "next": "check-next"
+      },
+      {
+        "id": "next-keyword",
+        "type": "javascript-code",
+        "label": "切换到下一个关键词",
+        "code": "const index = Number(automaRefData('variables', 'keywordIndex') || 0);\nautomaSetVariable('keywordIndex', index + 1);\nautomaNextBlock('init-keyword');",
+        "next": "init-keyword"
+      },
+      {
+        "id": "done",
+        "type": "notification",
+        "label": "全部完成",
+        "message": "所有关键词都已经搜索并翻到最后一页。"
+      }
+    ],
+    "edges": [
+      ["trigger-manual", "init-keyword"],
+      ["init-keyword", "open-search"],
+      ["open-search", "wait-results"],
+      ["wait-results", "check-next"],
+      ["check-next", "click-next"],
+      ["check-next", "next-keyword"],
+      ["click-next", "wait-page"],
+      ["wait-page", "check-next"],
+      ["next-keyword", "init-keyword"],
+      ["init-keyword", "done"]
+    ]
+  },
+  "usageNotes": [
+    "先把variables.keywords里的示例关键词替换成你的关键词。",
+    "Google可能因地区、语言、账号状态显示不同的下一页按钮；如果点击失败，把click-next.selector改成你页面上的下一页CSS选择器。",
+    "建议把等待时间duration从2500按网速调整到3000-6000。",
+    "如果Automa导入后提示块类型不匹配，请用同样逻辑在Automa界面创建：手动触发 -> JS取关键词 -> 新标签打开Google -> 等待 -> JS检查下一页 -> 点击下一页/切换关键词。"
+  ]
+}
