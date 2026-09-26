@@ -11,6 +11,8 @@ npm run dev
 
 生产构建：`npm run build`，静态产物在 `dist/`。
 
+GitHub Actions 会在 `main`、`codex/**` 分支推送及面向 `main` 的 Pull Request 上自动执行构建。
+
 ## 页面
 
 - `/` 首页
