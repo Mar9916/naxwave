@@ -1,8 +1,8 @@
 name = "naxwave-pet-safety"
-compatibility_date = "2025-03-01"
+compatibility_date = "2026-09-26"
 pages_build_output_dir = "./dist"
 
 [[d1_databases]]
 binding = "DB"
 database_name = "naxwave-pet-inquiries"
-database_id = "TO_BE_CREATED"
+database_id = "b159e0a1-280b-434a-a38e-77967e759497"
