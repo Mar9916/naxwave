@@ -1,50 +1,39 @@
-# NAXWAVE Pet Safety 独立站框架
+# NAXWAVE Pet Safety 独立站
 
-基于 Astro 静态输出，目标部署到 Cloudflare Pages。网站英文；本说明及 `.pages.yml` CMS 字段标签为中文。
+## 当前线上环境
 
-## 本地预览
+- 网站：<https://naxwave-pet-safety.pages.dev>
+- GitHub：`Mar9916/naxwave`，生产分支 `codex/pet-safety-site`
+- Cloudflare Pages：仓库更新后自动构建发布，Astro 命令 `npm run build`，产物目录 `dist`
+- 询盘数据库：D1 `naxwave-pet-inquiries`，绑定名 `DB`，表 `inquiries`
+
+## Pages CMS 内容维护
+
+1. 打开 <https://app.pagescms.org/> 并用 GitHub 登录。
+2. 按提示为 `Mar9916` 安装 Pages CMS GitHub App，仅授予 `naxwave` 仓库访问权限。
+3. 打开仓库并选择生产分支 `codex/pet-safety-site`。
+4. 产品内容位于 `src/data/products/`，博客位于 `src/blog/`。保存到 GitHub 后 Cloudflare 会自动重新部署。
+
+产品参数、图片、认证、MOQ、交期、价格、制造能力、经营主体和隐私政策，只能在取得确认资料后补充。
+
+## 查看询盘
+
+在 Cloudflare 控制台打开 **Storage & databases → D1 → naxwave-pet-inquiries**，进入 SQL Console 查询：
+
+```sql
+SELECT created_at, name, email, company, country, interest, quantity, message
+FROM inquiries
+ORDER BY created_at DESC;
+```
+
+目前表单通过 Pages Function `/api/inquiries` 写入 D1。数据库不会自动发送邮件通知；请定期查看该表。隐私政策和实际经营主体资料仍待补充。
+
+## 本地开发
 
 ```bash
 npm install
 npm run dev
 ```
 
-生产构建：`npm run build`，静态产物在 `dist/`。
+Cloudflare 配置位于 `wrangler.toml`，询盘 API 位于 `functions/api/inquiries.ts`，表结构迁移位于 `migrations/0001_inquiries.sql`。
 
-GitHub Actions 会在 `main`、`codex/**` 分支推送及面向 `main` 的 Pull Request 上自动执行构建。
-
-## 页面
-
-- `/` 首页
-- `/products/nax100/`、`/products/nax101/` 产品详情及比较入口
-- `/oem-odm/` 合作能力
-- `/solutions/` 应用方案
-- `/resources/` 博客与采购指南入口
-- `/contact/` 询盘与样品申请
-
-## 内容维护
-
-Pages CMS 配置草稿位于 `.pages.yml`。将仓库连接到 Pages CMS 后，可管理 `src/data/products/` 内产品 JSON 及 `src/blog/` 内博客 Markdown。未确认的规格、认证、MOQ、交期、价格和企业资料留空或标记待补。
-
-## Cloudflare 询盘配置
-
-询盘函数位于 `functions/api/inquiries.ts`，D1 表结构为 `migrations/0001_inquiries.sql`。创建 D1 数据库后，将 `wrangler.toml` 中 `database_id` 替换为实际 ID，并在 Pages 项目绑定 D1，绑定变量名为 `DB`。联系表单已调用 `/api/inquiries`；部署前需创建数据库、应用迁移并补充隐私政策及询盘通知方式。
-
-命令顺序：
-
-1. `npm run d1:create` 创建 D1；将命令返回的 ID 填入 `wrangler.toml`。
-2. `npm run d1:migrate:remote` 建立线上数据表。
-3. `npm run build` 后执行 `npm run deploy` 发布到 Cloudflare Pages。
-4. 本地需要 Functions 时先构建，再运行 `npm run preview:pages`。
-
-部署需先在 Cloudflare 登录 Wrangler，并在 Cloudflare 创建/授权 Pages 项目。GitHub 自动构建可在 Pages 控制台连接仓库并使用 `npm run build`、产物目录 `dist`。
-
-## 待补资料
-
-- 实际经营主体法定名称及对外地址/联系信息
-- NAX100、NAX101 已确认产品参数、认证及产品图
-- MOQ、交期、价格/报价方式、样品政策
-- 研发制造能力及可公开证据
-- OEM/ODM 合作范围、流程及限制
-- 隐私政策、询盘接收与内部跟进人
-- Cloudflare D1 数据库 ID 与生产域名
