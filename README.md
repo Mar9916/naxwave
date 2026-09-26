@@ -26,7 +26,7 @@ FROM inquiries
 ORDER BY created_at DESC;
 ```
 
-目前表单通过 Pages Function `/api/inquiries` 写入 D1。数据库不会自动发送邮件通知；请定期查看该表。隐私政策和实际经营主体资料仍待补充。
+目前表单通过 Pages Function `/api/inquiries` 写入 D1，包含隐藏字段垃圾提交拦截、字段长度限制及服务端必填校验。数据库不会自动发送邮件通知；请定期查看该表。隐私政策和实际经营主体资料仍待补充。
 
 ## 本地开发
 
