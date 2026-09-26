@@ -23,6 +23,7 @@ content:
     path: src/blog
     filename: "{primary}.md"
     format: yaml-frontmatter
+    exclude: [article-template.md]
     fields:
       - { name: title, label: 英文标题, type: string, required: true }
       - { name: date, label: 发布日期, type: date }
@@ -30,3 +31,4 @@ content:
       - { name: author, label: 作者, type: string }
       - { name: published, label: 发布, type: boolean }
       - { name: body, label: 正文, type: rich-text }
+
